@@ -1,0 +1,17 @@
+*.iml
+.gradle
+/local.properties
+/.idea/
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+*.apk
+*.aab
+
+# فایل‌های امضای انتشار - هرگز نباید در گیت‌هاب قرار بگیرند
+*.jks
+*.keystore
+keystore.properties

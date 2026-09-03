@@ -1,0 +1,18 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- بدنه تقویم -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M32,36 h44 a4,4 0 0 1 4,4 v34 a4,4 0 0 1 -4,4 h-44 a4,4 0 0 1 -4,-4 v-34 a4,4 0 0 1 4,-4 z"/>
+    <!-- سربرگ تقویم (پررنگ‌تر) -->
+    <path
+        android:fillColor="#B2DFDB"
+        android:pathData="M32,36 h44 a4,4 0 0 1 4,4 v8 h-52 v-8 a4,4 0 0 1 4,-4 z"/>
+    <!-- تیک تأیید پرداخت -->
+    <path
+        android:fillColor="#00897B"
+        android:pathData="M45,66 l8,8 l14,-16 l-4,-4 l-10,12 l-4,-4 z"/>
+</vector>
