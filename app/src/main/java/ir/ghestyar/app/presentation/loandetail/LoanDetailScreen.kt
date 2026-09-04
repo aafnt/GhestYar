@@ -1,11 +1,16 @@
 package ir.ghestyar.app.presentation.loandetail
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -18,9 +23,11 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.lifecycle.viewmodel.initializer
 import ir.ghestyar.app.GhestYarApplication
 import ir.ghestyar.app.data.entity.InstallmentEntity
+import ir.ghestyar.app.data.entity.LoanEntity
 import ir.ghestyar.app.domain.calculator.PersianDateConverter
 import ir.ghestyar.app.ui.components.InstallmentRow
 import ir.ghestyar.app.ui.components.LoanImage
+import ir.ghestyar.app.utils.ImageStorageManager
 import ir.ghestyar.app.utils.PersianNumberUtils
 import java.time.LocalDate
 
@@ -46,6 +53,7 @@ fun LoanDetailScreen(
     var installmentForPayment by remember { mutableStateOf<InstallmentEntity?>(null) }
     var installmentForEdit by remember { mutableStateOf<InstallmentEntity?>(null) }
     var showDeleteConfirm by remember { mutableStateOf(false) }
+    var showEditLoan by remember { mutableStateOf(false) }
 
     LaunchedEffect(state.deleted) { if (state.deleted) onBack() }
 
@@ -55,6 +63,9 @@ fun LoanDetailScreen(
                 title = { Text(state.loan?.name ?: "", fontWeight = FontWeight.Bold) },
                 navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.Filled.ArrowBack, contentDescription = "بازگشت") } },
                 actions = {
+                    IconButton(onClick = { showEditLoan = true }) {
+                        Icon(Icons.Filled.Edit, contentDescription = "ویرایش وام")
+                    }
                     IconButton(onClick = { showDeleteConfirm = true }) {
                         Icon(Icons.Filled.Delete, contentDescription = "حذف وام")
                     }
@@ -139,6 +150,14 @@ fun LoanDetailScreen(
             onEdit = { updated -> viewModel.updateInstallment(updated); installmentForEdit = null },
             onMarkPaid = { installmentForEdit = null; installmentForPayment = inst },
             onUnmarkPaid = { viewModel.unmarkPaid(inst.id); installmentForEdit = null }
+        )
+    }
+
+    if (showEditLoan && state.loan != null) {
+        EditLoanDialog(
+            loan = state.loan!!,
+            onDismiss = { showEditLoan = false },
+            onSave = { updated -> viewModel.updateLoan(updated); showEditLoan = false }
         )
     }
 
@@ -250,6 +269,68 @@ private fun InstallmentActionSheet(
             }
         },
         confirmButton = { TextButton(onClick = onDismiss) { Text("بستن") } }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun EditLoanDialog(
+    loan: LoanEntity,
+    onDismiss: () -> Unit,
+    onSave: (LoanEntity) -> Unit
+) {
+    val context = LocalContext.current
+    var name by remember { mutableStateOf(loan.name) }
+    var amountText by remember { mutableStateOf(PersianNumberUtils.toPersianDigits(loan.totalAmount.toString())) }
+    var imagePath by remember { mutableStateOf(loan.imagePath) }
+
+    val imagePicker = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        if (uri != null) {
+            val path = ImageStorageManager.copyToInternalStorage(context, uri)
+            if (path != null) imagePath = path
+        }
+    }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("ویرایش وام") },
+        text = {
+            Column {
+                Box(contentAlignment = Alignment.BottomEnd) {
+                    LoanImage(imagePath, size = 72.dp)
+                    IconButton(onClick = {
+                        imagePicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                    }) {
+                        Icon(Icons.Filled.PhotoCamera, contentDescription = "تغییر تصویر")
+                    }
+                }
+                Spacer(Modifier.height(8.dp))
+                OutlinedTextField(
+                    value = name,
+                    onValueChange = { name = it },
+                    label = { Text("نام وام") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(Modifier.height(8.dp))
+                OutlinedTextField(
+                    value = amountText,
+                    onValueChange = { amountText = it },
+                    label = { Text("مبلغ وام (تومان)") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = {
+                if (name.isNotBlank()) {
+                    val amount = PersianNumberUtils.parseAmount(amountText) ?: loan.totalAmount
+                    onSave(loan.copy(name = name.trim(), totalAmount = amount, imagePath = imagePath))
+                }
+            }) { Text("ذخیره") }
+        },
+        dismissButton = { TextButton(onClick = onDismiss) { Text("انصراف") } }
     )
 }
 

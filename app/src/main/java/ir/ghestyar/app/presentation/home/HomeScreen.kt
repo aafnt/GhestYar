@@ -141,6 +141,8 @@ private fun CriticalWarningBanner(warnings: List<String>) {
 private fun MonthlyReportSection(state: HomeUiState, viewModel: HomeViewModel) {
     Card(shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)) {
         Column(Modifier.padding(16.dp)) {
+            Text("وضعیت اقساط", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Spacer(Modifier.height(12.dp))
             Row(
                 Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,

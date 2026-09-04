@@ -126,7 +126,7 @@ class HomeViewModel(
         } ?: MonthlyReport(emptyList(), 0)
 
         return HomeUiState(
-            loans = loanCards,
+            loans = loanCards.sortedBy { it.nextInstallmentDueDate?.dayOfMonth ?: Int.MAX_VALUE },
             summary = summary,
             selectedJalaliYear = selectedYear,
             availableYears = availableYears,

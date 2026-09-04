@@ -156,6 +156,11 @@ private fun LabeledField(
             placeholder = placeholder?.let { { Text(it) } },
             isError = error != null,
             singleLine = true,
+            shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                focusedContainerColor = MaterialTheme.colorScheme.surface
+            ),
             keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(keyboardType = keyboardType),
             modifier = Modifier.fillMaxWidth()
         )
@@ -175,6 +180,11 @@ private fun PeriodTypeSelector(selected: PeriodType, onSelect: (PeriodType) -> U
             onValueChange = {},
             readOnly = true,
             label = { Text("دوره پرداخت") },
+            shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                focusedContainerColor = MaterialTheme.colorScheme.surface
+            ),
             modifier = Modifier.fillMaxWidth().menuAnchor()
         )
         ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {

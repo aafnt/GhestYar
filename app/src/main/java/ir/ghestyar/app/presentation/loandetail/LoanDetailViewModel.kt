@@ -67,6 +67,11 @@ class LoanDetailViewModel(
         NotificationScheduler.rescheduleAll(context, db)
     }
 
+    /** ویرایش اطلاعات وام (نام، مبلغ، تصویر) - بدون تغییر در اقساط موجود */
+    fun updateLoan(updated: LoanEntity) = viewModelScope.launch {
+        loanRepository.updateLoan(updated)
+    }
+
     fun deleteLoan(onDeleted: () -> Unit) = viewModelScope.launch {
         val loan = uiState.value.loan ?: return@launch
         loanRepository.deleteLoan(loan)

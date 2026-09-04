@@ -9,14 +9,15 @@ val TealPrimaryContainerLight = Color(0xFFB2DFDB)
 val TealPrimaryContainerDark = Color(0xFF004D40)
 
 // رنگ‌های خنثی پس‌زمینه و سطوح
-val BackgroundLight = Color(0xFFFAFAFA)
-val SurfaceLight = Color(0xFFFFFFFF)
+val BackgroundLight = Color(0xFFE5F1ED)
+val SurfaceLight = Color(0xFFF4F9F5)
 val BackgroundDark = Color(0xFF121212)
 val SurfaceDark = Color(0xFF1E1E1E)
 
 // رنگ‌های وضعیت اقساط - ملایم و حرفه‌ای (بند ۸: از قرمز/سبز پررنگ خودداری شود)
-val StatusPaidLight = Color(0xFF2E7D32)      // سبز ملایم
-val StatusPaidBgLight = Color(0xFFE8F5E9)
+// سبز پرداخت‌شده کمی تیره‌تر شد تا با پس‌زمینه‌های مینتی جدید (بالا) قاطی نشود
+val StatusPaidLight = Color(0xFF1B5E20)      // سبز تیره‌تر
+val StatusPaidBgLight = Color(0xFFD9EBDB)
 val StatusOverdueLight = Color(0xFFC62828)   // قرمز ملایم
 val StatusOverdueBgLight = Color(0xFFFDECEA)
 val StatusUpcomingLight = Color(0xFF616161)  // خاکستری خنثی
