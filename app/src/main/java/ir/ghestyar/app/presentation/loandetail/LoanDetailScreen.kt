@@ -82,8 +82,12 @@ fun LoanDetailScreen(
         val loan = state.loan!!
 
         Column(Modifier.padding(padding).fillMaxSize()) {
-            LoanHeader(loan.name, loan.imagePath, loan.totalAmount, loan.receivedDate, loan.installmentCount,
-                state.paid.size, state.overdue.size, state.upcoming.size)
+            Card(
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
+            ) {
+                LoanHeader(loan.name, loan.imagePath, loan.totalAmount, loan.receivedDate, loan.installmentCount)
+            }
 
             val tabs = DetailTab.entries
             TabRow(selectedTabIndex = selectedTab) {
@@ -97,7 +101,12 @@ fun LoanDetailScreen(
                     Tab(
                         selected = selectedTab == index,
                         onClick = { selectedTab = index },
-                        text = { Text("${tab.title} (${PersianNumberUtils.formatNumber(count)})") }
+                        text = {
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                Text(tab.title, style = MaterialTheme.typography.labelSmall)
+                                Text(PersianNumberUtils.formatNumber(count), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)
+                            }
+                        }
                     )
                 }
             }
@@ -178,28 +187,19 @@ fun LoanDetailScreen(
 
 @Composable
 private fun LoanHeader(
-    name: String, imagePath: String?, totalAmount: Long, receivedDate: String, installmentCount: Int,
-    paidCount: Int, overdueCount: Int, upcomingCount: Int
+    name: String, imagePath: String?, totalAmount: Long, receivedDate: String, installmentCount: Int
 ) {
-    Column(Modifier.fillMaxWidth().padding(16.dp)) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            LoanImage(imagePath, size = 56.dp)
-            Spacer(Modifier.width(12.dp))
-            Column {
-                Text(name, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-                Text(PersianNumberUtils.formatToman(totalAmount), style = MaterialTheme.typography.bodyMedium)
-                Text(
-                    "دریافت: ${PersianDateConverter.formatFull(LocalDate.parse(receivedDate))} — ${PersianNumberUtils.formatNumber(installmentCount)} قسط",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        }
-        Spacer(Modifier.height(8.dp))
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text("🟢 پرداخت‌شده: ${PersianNumberUtils.formatNumber(paidCount)}", style = MaterialTheme.typography.bodySmall)
-            Text("🔴 معوق: ${PersianNumberUtils.formatNumber(overdueCount)}", style = MaterialTheme.typography.bodySmall)
-            Text("⚪ آینده: ${PersianNumberUtils.formatNumber(upcomingCount)}", style = MaterialTheme.typography.bodySmall)
+    Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+        LoanImage(imagePath, size = 56.dp)
+        Spacer(Modifier.width(12.dp))
+        Column {
+            Text(name, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+            Text(PersianNumberUtils.formatToman(totalAmount), style = MaterialTheme.typography.bodyMedium)
+            Text(
+                "دریافت: ${PersianDateConverter.formatFull(LocalDate.parse(receivedDate))} — ${PersianNumberUtils.formatNumber(installmentCount)} قسط",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }

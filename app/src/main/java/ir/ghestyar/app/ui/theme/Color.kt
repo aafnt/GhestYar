@@ -21,7 +21,7 @@ val StatusPaidBgLight = Color(0xFFD9EBDB)
 val StatusOverdueLight = Color(0xFFC62828)   // قرمز ملایم
 val StatusOverdueBgLight = Color(0xFFFDECEA)
 val StatusUpcomingLight = Color(0xFF616161)  // خاکستری خنثی
-val StatusUpcomingBgLight = Color(0xFFF5F5F5)
+val StatusUpcomingBgLight = Color(0xFFF4F9F5)
 
 val StatusPaidDark = Color(0xFF81C784)
 val StatusPaidBgDark = Color(0xFF1B3A1E)

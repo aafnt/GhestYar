@@ -17,7 +17,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import ir.ghestyar.app.presentation.home.LoanCardUiModel
-import ir.ghestyar.app.ui.theme.LocalInstallmentStatusColors
 import ir.ghestyar.app.utils.PersianNumberUtils
 import ir.ghestyar.app.domain.calculator.PersianDateConverter
 
@@ -27,8 +26,6 @@ fun LoanCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val statusColors = LocalInstallmentStatusColors.current
-
     Card(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
@@ -56,10 +53,10 @@ fun LoanCard(
 
             Spacer(Modifier.height(12.dp))
 
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                MiniStat("🟢", "پرداخت‌شده", loan.paidCount, statusColors.paidBg, statusColors.paid, Modifier.weight(1f))
-                MiniStat("🔴", "معوق", loan.overdueCount, statusColors.overdueBg, statusColors.overdue, Modifier.weight(1f))
-                MiniStat("⚪", "آینده", loan.upcomingCount, statusColors.upcomingBg, statusColors.upcoming, Modifier.weight(1f))
+            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                MiniStat("🟢", loan.paidCount)
+                MiniStat("🔴", loan.overdueCount)
+                MiniStat("⚪", loan.upcomingCount)
             }
 
             if (loan.nextInstallmentAmount != null && loan.nextInstallmentDueDate != null) {
@@ -83,35 +80,26 @@ fun LoanCard(
 }
 
 @Composable
-private fun MiniStat(
-    emoji: String,
-    label: String,
-    count: Int,
-    bg: Color,
-    fg: Color,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier
-            .clip(RoundedCornerShape(10.dp))
-            .background(bg)
-            .padding(vertical = 6.dp, horizontal = 8.dp),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(emoji, style = MaterialTheme.typography.labelSmall)
+private fun MiniStat(emoji: String, count: Int) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Text(emoji, style = MaterialTheme.typography.labelMedium)
         Spacer(Modifier.width(4.dp))
         Text(
             PersianNumberUtils.formatNumber(count),
             style = MaterialTheme.typography.labelMedium,
-            color = fg,
+            color = Color.Black,
             fontWeight = FontWeight.Bold
         )
     }
 }
 
 @Composable
-fun LoanImage(imagePath: String?, size: androidx.compose.ui.unit.Dp, modifier: Modifier = Modifier) {
+fun LoanImage(
+    imagePath: String?,
+    size: androidx.compose.ui.unit.Dp,
+    modifier: Modifier = Modifier,
+    shape: androidx.compose.ui.graphics.Shape = RoundedCornerShape(12.dp)
+) {
     if (imagePath != null) {
         AsyncImage(
             model = imagePath,
@@ -119,13 +107,13 @@ fun LoanImage(imagePath: String?, size: androidx.compose.ui.unit.Dp, modifier: M
             contentScale = ContentScale.Crop,
             modifier = modifier
                 .size(size)
-                .clip(RoundedCornerShape(12.dp))
+                .clip(shape)
         )
     } else {
         Box(
             modifier
                 .size(size)
-                .clip(RoundedCornerShape(12.dp))
+                .clip(shape)
                 .background(MaterialTheme.colorScheme.primaryContainer),
             contentAlignment = Alignment.Center
         ) {

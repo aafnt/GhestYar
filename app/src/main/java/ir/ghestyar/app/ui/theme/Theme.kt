@@ -32,7 +32,8 @@ private val LightColors = lightColorScheme(
     primaryContainer = TealPrimaryContainerLight,
     onPrimaryContainer = Color(0xFF00201C),
     background = BackgroundLight,
-    surface = SurfaceLight
+    surface = SurfaceLight,
+    surfaceTint = Color.Transparent
 )
 
 private val DarkColors = darkColorScheme(
@@ -41,7 +42,8 @@ private val DarkColors = darkColorScheme(
     primaryContainer = TealPrimaryContainerDark,
     onPrimaryContainer = TealPrimaryContainerLight,
     background = BackgroundDark,
-    surface = SurfaceDark
+    surface = SurfaceDark,
+    surfaceTint = Color.Transparent
 )
 
 enum class AppThemeMode { LIGHT, DARK, SYSTEM }

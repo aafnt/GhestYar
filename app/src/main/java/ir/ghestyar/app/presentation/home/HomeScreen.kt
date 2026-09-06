@@ -72,9 +72,15 @@ fun HomeScreen(
             item { SummarySection(state) }
 
             if (state.criticalLoanWarnings.isNotEmpty()) {
+                item {
+                    Text("🚨 هشدار مهم", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                }
                 item { CriticalWarningBanner(state.criticalLoanWarnings) }
             }
 
+            item {
+                Text("وضعیت اقساط", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            }
             item { MonthlyReportSection(state, viewModel) }
 
             item {
@@ -124,11 +130,11 @@ private fun SummarySection(state: HomeUiState) {
 @Composable
 private fun CriticalWarningBanner(warnings: List<String>) {
     Card(
+        modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer),
         shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
     ) {
         Column(Modifier.padding(16.dp)) {
-            Text("🚨 هشدار مهم", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onErrorContainer)
             warnings.forEach {
                 Text(it, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onErrorContainer)
             }
@@ -141,8 +147,6 @@ private fun CriticalWarningBanner(warnings: List<String>) {
 private fun MonthlyReportSection(state: HomeUiState, viewModel: HomeViewModel) {
     Card(shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)) {
         Column(Modifier.padding(16.dp)) {
-            Text("وضعیت اقساط", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-            Spacer(Modifier.height(12.dp))
             Row(
                 Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -178,8 +182,19 @@ private fun MonthlyReportSection(state: HomeUiState, viewModel: HomeViewModel) {
                     )
                 } else {
                     state.monthlyReport.rows.forEach { row ->
-                        Row(Modifier.fillMaxWidth().padding(vertical = 4.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-                            Text(row.loanName, style = MaterialTheme.typography.bodyMedium)
+                        Row(
+                            Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+                        ) {
+                            Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                                ir.ghestyar.app.ui.components.LoanImage(
+                                    row.loanImagePath, size = 20.dp,
+                                    shape = androidx.compose.foundation.shape.CircleShape
+                                )
+                                Spacer(Modifier.width(8.dp))
+                                Text(row.loanName, style = MaterialTheme.typography.bodyMedium)
+                            }
                             Text(PersianNumberUtils.formatToman(row.amount), style = MaterialTheme.typography.bodyMedium)
                         }
                     }

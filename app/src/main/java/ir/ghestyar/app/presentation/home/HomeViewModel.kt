@@ -191,6 +191,7 @@ class HomeViewModel(
         val rows = relevant.groupBy { it.loanId }.map { (loanId, list) ->
             MonthlyReportRow(
                 loanName = loanNameById[loanId]?.name ?: "—",
+                loanImagePath = loanNameById[loanId]?.imagePath,
                 amount = list.sumOf { it.amount }
             )
         }.sortedByDescending { it.amount }

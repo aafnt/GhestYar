@@ -32,6 +32,7 @@ data class SelectableMonth(
 /** ردیف یک وام در گزارش ماه انتخاب‌شده */
 data class MonthlyReportRow(
     val loanName: String,
+    val loanImagePath: String?,
     val amount: Long
 )
 
