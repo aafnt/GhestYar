@@ -23,31 +23,45 @@ const val EXTRA_ALERT_INDEX = "extra_alert_index"
  */
 object NotificationScheduler {
 
-    /** بازسازی کامل زمان‌بندی تمام اعلان‌ها بر اساس وضعیت فعلی دیتابیس */
+    /**
+     * بازسازی کامل زمان‌بندی تمام اعلان‌ها بر اساس وضعیت فعلی دیتابیس.
+     *
+     * این تابع از MainActivity در هر بار باز شدن اپ، و بعد از Restore صدا زده می‌شود؛ به همین
+     * دلیل هرگز نباید Exception پرتاب کند - وگرنه یک داده نامعتبر می‌تواند کل اپ را برای همیشه
+     * در حال استارتاپ کرش بدهد (چون این تابع دقیقاً همان‌جا دوباره صدا زده می‌شود).
+     */
     suspend fun rescheduleAll(context: Context, db: AppDatabase) {
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        if (!canScheduleExact(alarmManager)) return
+        try {
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as? AlarmManager ?: return
+            if (!canScheduleExact(alarmManager)) return
 
-        val settings = db.settingsDao().get()
-        if (settings?.notificationsEnabled == false) {
-            cancelAll(context, db)
-            return
-        }
+            val settings = db.settingsDao().get()
+            if (settings?.notificationsEnabled == false) {
+                cancelAll(context, db)
+                return
+            }
 
-        val loans = db.loanDao().getAllOnce()
-        val today = LocalDate.now()
+            val loans = db.loanDao().getAllOnce()
+            val today = LocalDate.now()
+            val allAlerts = db.alertDao().getAllOnce()
+            val installments = db.installmentDao().getAllOnce().filter { it.paidDate == null }
 
-        val installments = db.installmentDao().getAllOnce().filter { it.paidDate == null }
-
-        for (loan in loans) {
-            val loanAlerts = db.alertDao().getAllOnce().filter { it.loanId == loan.id && it.enabled }
-            val loanInstallments = installments.filter { it.loanId == loan.id }
-            for (installment in loanInstallments) {
-                val dueDate = LocalDate.parse(installment.dueDate)
-                for (alert in loanAlerts) {
-                    scheduleOne(context, alarmManager, installment, alert, dueDate, today)
+            for (loan in loans) {
+                val loanAlerts = allAlerts.filter { it.loanId == loan.id && it.enabled }
+                val loanInstallments = installments.filter { it.loanId == loan.id }
+                for (installment in loanInstallments) {
+                    try {
+                        val dueDate = LocalDate.parse(installment.dueDate)
+                        for (alert in loanAlerts) {
+                            scheduleOne(context, alarmManager, installment, alert, dueDate, today)
+                        }
+                    } catch (_: Exception) {
+                        // یک قسط با تاریخ نامعتبر نباید بقیه زمان‌بندی را متوقف کند
+                    }
                 }
             }
+        } catch (_: Exception) {
+            // زمان‌بندی اعلان هرگز نباید باعث کرش کل اپ شود
         }
     }
 

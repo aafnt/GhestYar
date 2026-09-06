@@ -31,8 +31,19 @@ private val LightColors = lightColorScheme(
     onPrimary = Color.White,
     primaryContainer = TealPrimaryContainerLight,
     onPrimaryContainer = Color(0xFF00201C),
+    secondaryContainer = SurfaceLight,
+    onSecondaryContainer = Color(0xFF1B1B1B),
     background = BackgroundLight,
     surface = SurfaceLight,
+    surfaceVariant = SurfaceLight,
+    onSurfaceVariant = Color(0xFF3F4944),
+    surfaceContainerLowest = BackgroundLight,
+    surfaceContainerLow = SurfaceLight,
+    surfaceContainer = SurfaceLight,
+    surfaceContainerHigh = SurfaceLight,
+    surfaceContainerHighest = SurfaceLight,
+    outline = Color(0xFFB0BFB9),
+    outlineVariant = Color(0xFFD5E0DB),
     surfaceTint = Color.Transparent
 )
 
@@ -43,6 +54,12 @@ private val DarkColors = darkColorScheme(
     onPrimaryContainer = TealPrimaryContainerLight,
     background = BackgroundDark,
     surface = SurfaceDark,
+    surfaceVariant = SurfaceDark,
+    surfaceContainerLowest = BackgroundDark,
+    surfaceContainerLow = SurfaceDark,
+    surfaceContainer = SurfaceDark,
+    surfaceContainerHigh = SurfaceDark,
+    surfaceContainerHighest = SurfaceDark,
     surfaceTint = Color.Transparent
 )
 

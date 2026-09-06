@@ -124,6 +124,6 @@ private fun SettingsSection(title: String, content: @Composable ColumnScope.() -
     Column {
         Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(8.dp))
-        Card { Column(Modifier.padding(16.dp), content = content) }
+        Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) { Column(Modifier.padding(16.dp), content = content) }
     }
 }

@@ -84,7 +84,8 @@ fun LoanDetailScreen(
         Column(Modifier.padding(padding).fillMaxSize()) {
             Card(
                 modifier = Modifier.fillMaxWidth().padding(16.dp),
-                shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
+                shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
             ) {
                 LoanHeader(loan.name, loan.imagePath, loan.totalAmount, loan.receivedDate, loan.installmentCount)
             }

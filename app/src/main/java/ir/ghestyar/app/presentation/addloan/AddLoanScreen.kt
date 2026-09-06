@@ -198,7 +198,7 @@ private fun PeriodTypeSelector(selected: PeriodType, onSelect: (PeriodType) -> U
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AlertEditor(title: String, alert: AlertFormState, onChange: (AlertFormState) -> Unit) {
-    Card {
+    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
         Column(Modifier.padding(12.dp)) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                 Text(title, fontWeight = FontWeight.Bold)
@@ -238,7 +238,7 @@ private fun AlertEditor(title: String, alert: AlertFormState, onChange: (AlertFo
 
 @Composable
 private fun PreviewSection(state: AddLoanFormState) {
-    Card {
+    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
         Column(Modifier.padding(12.dp)) {
             Text("پیش‌نمایش اقساط", fontWeight = FontWeight.Bold)
             Spacer(Modifier.height(8.dp))

@@ -98,7 +98,7 @@ fun HomeScreen(
 
 @Composable
 private fun SummarySection(state: HomeUiState) {
-    Card(shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)) {
+    Card(shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
         Row(
             Modifier.fillMaxWidth().padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween
@@ -145,7 +145,7 @@ private fun CriticalWarningBanner(warnings: List<String>) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MonthlyReportSection(state: HomeUiState, viewModel: HomeViewModel) {
-    Card(shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)) {
+    Card(shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
         Column(Modifier.padding(16.dp)) {
             Row(
                 Modifier.fillMaxWidth(),

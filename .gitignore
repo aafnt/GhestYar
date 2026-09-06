@@ -11,7 +11,13 @@ local.properties
 *.apk
 *.aab
 
-# فایل‌های امضای انتشار - هرگز نباید در گیت‌هاب قرار بگیرند
+# فایل‌های امضای انتشار رسمی - هرگز نباید در گیت‌هاب قرار بگیرند
+release.jks
+release.keystore
 *.jks
-*.keystore
 keystore.properties
+
+# توجه: keystore/debug.keystore عمداً از این قانون مستثناست (چند خط پایین‌تر) چون
+# کلید Debug ثابت پروژه است و باید در گیت‌هاب بماند تا Build های مختلف (GitHub Actions و
+# لوکال) همیشه یک امضای یکسان تولید کنند و نصب Update به‌جای خطای Uninstall/Reinstall کار کند.
+!keystore/debug.keystore
