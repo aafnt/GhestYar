@@ -33,6 +33,7 @@ data class SelectableMonth(
 data class MonthlyReportRow(
     val loanName: String,
     val loanImagePath: String?,
+    val day: Int,
     val amount: Long
 )
 

@@ -126,7 +126,9 @@ class HomeViewModel(
         } ?: MonthlyReport(emptyList(), 0)
 
         return HomeUiState(
-            loans = loanCards.sortedBy { it.nextInstallmentDueDate?.dayOfMonth ?: Int.MAX_VALUE },
+            loans = loanCards.sortedBy { card ->
+                card.nextInstallmentDueDate?.let { PersianDateConverter.toJalali(it).day } ?: Int.MAX_VALUE
+            },
             summary = summary,
             selectedJalaliYear = selectedYear,
             availableYears = availableYears,
@@ -189,12 +191,14 @@ class HomeViewModel(
         }
 
         val rows = relevant.groupBy { it.loanId }.map { (loanId, list) ->
+            val firstDueDate = LocalDate.parse(list.first().dueDate)
             MonthlyReportRow(
                 loanName = loanNameById[loanId]?.name ?: "—",
                 loanImagePath = loanNameById[loanId]?.imagePath,
+                day = PersianDateConverter.toJalali(firstDueDate).day,
                 amount = list.sumOf { it.amount }
             )
-        }.sortedByDescending { it.amount }
+        }.sortedBy { it.day }
 
         return MonthlyReport(rows = rows, total = rows.sumOf { it.amount })
     }
