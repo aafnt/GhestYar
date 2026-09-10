@@ -13,7 +13,8 @@ data class LoanCardUiModel(
     val overdueCount: Int,
     val upcomingCount: Int,
     val nextInstallmentAmount: Long?,
-    val nextInstallmentDueDate: LocalDate?
+    val nextInstallmentDueDate: LocalDate?,
+    val averageDelayDays: Int?
 )
 
 data class HomeSummary(
@@ -44,6 +45,7 @@ data class MonthlyReport(
 
 data class HomeUiState(
     val loans: List<LoanCardUiModel> = emptyList(),
+    val archivedLoans: List<LoanCardUiModel> = emptyList(),
     val summary: HomeSummary = HomeSummary(0, null, null),
     val selectedJalaliYear: Int = 0,
     val availableYears: List<Int> = emptyList(),

@@ -23,6 +23,9 @@ val StatusOverdueBgLight = Color(0xFFFDECEA)
 val StatusUpcomingLight = Color(0xFF616161)  // خاکستری خنثی
 val StatusUpcomingBgLight = Color(0xFFF4F9F5)
 
+// رنگ کارت وام‌های آرشیوشده (تسویه‌شده) - عمداً کمی تیره‌تر از کارت‌های فعال تا متمایز باشد
+val ArchivedCardBg = Color(0xFFDCE7E2)
+
 val StatusPaidDark = Color(0xFF81C784)
 val StatusPaidBgDark = Color(0xFF1B3A1E)
 val StatusOverdueDark = Color(0xFFEF9A9A)

@@ -73,6 +73,16 @@ class HomeViewModel(
                 .filter { it.paidDate == null }
                 .minByOrNull { it.dueDate }
 
+            val paidWithDelay = loanInstallments.filter { it.paidDate != null }
+            val averageDelay = if (paidWithDelay.isNotEmpty()) {
+                val totalDelay = paidWithDelay.sumOf {
+                    ir.ghestyar.app.domain.calculator.InstallmentCalculator.delayDays(
+                        LocalDate.parse(it.dueDate), LocalDate.parse(it.paidDate!!)
+                    )
+                }
+                (totalDelay / paidWithDelay.size).toInt()
+            } else null
+
             LoanCardUiModel(
                 id = loan.id,
                 name = loan.name,
@@ -83,8 +93,14 @@ class HomeViewModel(
                 overdueCount = overdue,
                 upcomingCount = upcoming,
                 nextInstallmentAmount = next?.amount,
-                nextInstallmentDueDate = next?.dueDate?.let(LocalDate::parse)
+                nextInstallmentDueDate = next?.dueDate?.let(LocalDate::parse),
+                averageDelayDays = averageDelay
             )
+        }
+
+        // --- آرشیو: وام‌هایی که کاملاً تسویه شده‌اند (همه اقساط پرداخت‌شده) ---
+        val (archivedCards, activeCards) = loanCards.partition {
+            it.installmentCount > 0 && it.paidCount == it.installmentCount
         }
 
         // --- خلاصه بالای صفحه ---
@@ -126,9 +142,10 @@ class HomeViewModel(
         } ?: MonthlyReport(emptyList(), 0)
 
         return HomeUiState(
-            loans = loanCards.sortedBy { card ->
+            loans = activeCards.sortedBy { card ->
                 card.nextInstallmentDueDate?.let { PersianDateConverter.toJalali(it).day } ?: Int.MAX_VALUE
             },
+            archivedLoans = archivedCards.sortedBy { it.name },
             summary = summary,
             selectedJalaliYear = selectedYear,
             availableYears = availableYears,

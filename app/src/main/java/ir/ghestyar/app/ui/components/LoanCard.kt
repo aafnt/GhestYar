@@ -24,14 +24,15 @@ import ir.ghestyar.app.domain.calculator.PersianDateConverter
 fun LoanCard(
     loan: LoanCardUiModel,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    containerColor: Color = MaterialTheme.colorScheme.surface
 ) {
     Card(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        colors = CardDefaults.cardColors(containerColor = containerColor),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -58,6 +59,15 @@ fun LoanCard(
                 MiniStat("🟢", loan.paidCount)
                 MiniStat("🔴", loan.overdueCount)
                 MiniStat("⚪", loan.upcomingCount)
+            }
+
+            if (loan.averageDelayDays != null) {
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    "میانگین تأخیر پرداخت: ${PersianNumberUtils.formatNumber(loan.averageDelayDays)} روز",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
 
             if (loan.nextInstallmentAmount != null && loan.nextInstallmentDueDate != null) {

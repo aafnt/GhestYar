@@ -59,7 +59,7 @@ fun HomeScreen(
             return@Scaffold
         }
 
-        if (state.loans.isEmpty()) {
+        if (state.loans.isEmpty() && state.archivedLoans.isEmpty()) {
             EmptyHomeState(Modifier.padding(padding).fillMaxSize(), onAddLoan)
             return@Scaffold
         }
@@ -89,6 +89,20 @@ fun HomeScreen(
 
             items(state.loans, key = { it.id }) { loan ->
                 LoanCard(loan = loan, onClick = { onOpenLoan(loan.id) })
+            }
+
+            if (state.archivedLoans.isNotEmpty()) {
+                item { Spacer(Modifier.height(8.dp)) }
+                item {
+                    Text("آرشیو وام‌ها", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                }
+                items(state.archivedLoans, key = { it.id }) { loan ->
+                    LoanCard(
+                        loan = loan,
+                        onClick = { onOpenLoan(loan.id) },
+                        containerColor = ir.ghestyar.app.ui.theme.ArchivedCardBg
+                    )
+                }
             }
 
             item { Spacer(Modifier.height(72.dp)) } // فضای FAB
