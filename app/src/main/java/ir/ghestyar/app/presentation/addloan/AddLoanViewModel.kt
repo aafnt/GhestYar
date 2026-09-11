@@ -31,6 +31,7 @@ class AddLoanViewModel(
     fun onFirstDueDateChange(v: String) = update { it.copy(firstDueDateText = v, showPreview = false) }
     fun onFirstInstallmentAmountChange(v: String) = update { it.copy(firstInstallmentAmountText = v, showPreview = false) }
     fun onOtherInstallmentAmountChange(v: String) = update { it.copy(otherInstallmentAmountText = v, showPreview = false) }
+    fun onDescriptionChange(v: String) = update { it.copy(description = v) }
     fun onAlert1Change(v: AlertFormState) = update { it.copy(alert1 = v) }
     fun onAlert2Change(v: AlertFormState) = update { it.copy(alert2 = v) }
 
@@ -106,7 +107,8 @@ class AddLoanViewModel(
                 periodType = s.periodType.name,
                 firstDueDate = firstDueDate.toString(),
                 firstInstallmentAmount = firstAmount,
-                otherInstallmentAmount = otherAmount
+                otherInstallmentAmount = otherAmount,
+                description = s.description.trim().ifBlank { null }
             )
 
             val installments = s.preview.map {

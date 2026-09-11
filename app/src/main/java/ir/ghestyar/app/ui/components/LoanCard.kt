@@ -55,19 +55,23 @@ fun LoanCard(
 
             Spacer(Modifier.height(12.dp))
 
-            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                MiniStat("🟢", loan.paidCount)
-                MiniStat("🔴", loan.overdueCount)
-                MiniStat("⚪", loan.upcomingCount)
-            }
-
-            if (loan.averageDelayDays != null) {
-                Spacer(Modifier.height(6.dp))
-                Text(
-                    "میانگین تأخیر پرداخت: ${PersianNumberUtils.formatNumber(loan.averageDelayDays)} روز",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                    MiniStat("🟢", loan.paidCount)
+                    MiniStat("🔴", loan.overdueCount)
+                    MiniStat("⚪", loan.upcomingCount)
+                }
+                if (loan.averageDelayDays != null) {
+                    Text(
+                        "میانگین تأخیر پرداخت: ${PersianNumberUtils.formatNumber(loan.averageDelayDays)} روز",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
 
             if (loan.nextInstallmentAmount != null && loan.nextInstallmentDueDate != null) {
@@ -98,7 +102,7 @@ private fun MiniStat(emoji: String, count: Int) {
         Text(
             PersianNumberUtils.formatNumber(count),
             style = MaterialTheme.typography.labelMedium,
-            color = Color.Black,
+            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
         )
     }

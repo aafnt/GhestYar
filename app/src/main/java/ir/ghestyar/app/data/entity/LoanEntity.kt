@@ -20,6 +20,7 @@ data class LoanEntity(
     val firstDueDate: String,
     val firstInstallmentAmount: Long,
     val otherInstallmentAmount: Long,
+    val description: String? = null,
     val createdAt: Long = System.currentTimeMillis()
 ) {
     companion object

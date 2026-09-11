@@ -1,5 +1,6 @@
 package ir.ghestyar.app.presentation.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -81,7 +82,7 @@ fun HomeScreen(
             item {
                 Text("وضعیت اقساط", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             }
-            item { MonthlyReportSection(state, viewModel) }
+            item { MonthlyReportSection(state, viewModel, onOpenLoan) }
 
             item {
                 Text("وام‌ها", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
@@ -158,7 +159,7 @@ private fun CriticalWarningBanner(warnings: List<String>) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun MonthlyReportSection(state: HomeUiState, viewModel: HomeViewModel) {
+private fun MonthlyReportSection(state: HomeUiState, viewModel: HomeViewModel, onOpenLoan: (Long) -> Unit) {
     Card(shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
         Column(Modifier.padding(16.dp)) {
             Row(
@@ -195,9 +196,12 @@ private fun MonthlyReportSection(state: HomeUiState, viewModel: HomeViewModel) {
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 } else {
-                    state.monthlyReport.rows.forEach { row ->
+                    state.monthlyReport.rows.forEachIndexed { index, row ->
                         Row(
-                            Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                            Modifier
+                                .fillMaxWidth()
+                                .clickable { onOpenLoan(row.loanId) }
+                                .padding(vertical = 10.dp),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
                         ) {
@@ -210,6 +214,12 @@ private fun MonthlyReportSection(state: HomeUiState, viewModel: HomeViewModel) {
                                 Text(row.loanName, style = MaterialTheme.typography.bodyMedium)
                             }
                             Text(PersianNumberUtils.formatToman(row.amount), style = MaterialTheme.typography.bodyMedium)
+                        }
+                        if (index != state.monthlyReport.rows.lastIndex) {
+                            HorizontalDivider(
+                                modifier = Modifier.padding(horizontal = 28.dp),
+                                color = MaterialTheme.colorScheme.outlineVariant
+                            )
                         }
                     }
                     HorizontalDivider(Modifier.padding(vertical = 8.dp))

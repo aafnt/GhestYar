@@ -28,7 +28,7 @@ import java.time.Instant
  */
 object BackupManager {
 
-    private const val SCHEMA_VERSION = 1
+    private const val SCHEMA_VERSION = 2
 
     data class RestoreResult(val success: Boolean, val message: String)
 
@@ -116,6 +116,7 @@ private fun LoanEntity.toJson(): JSONObject = JSONObject().apply {
     put("firstDueDate", firstDueDate)
     put("firstInstallmentAmount", firstInstallmentAmount)
     put("otherInstallmentAmount", otherInstallmentAmount)
+    put("description", description ?: JSONObject.NULL)
     put("createdAt", createdAt)
 }
 
@@ -130,6 +131,7 @@ private fun LoanEntity.Companion.fromJson(json: JSONObject): LoanEntity = LoanEn
     firstDueDate = json.getString("firstDueDate"),
     firstInstallmentAmount = json.getLong("firstInstallmentAmount"),
     otherInstallmentAmount = json.getLong("otherInstallmentAmount"),
+    description = json.optString("description", null).takeUnless { it.isNullOrEmpty() },
     createdAt = json.optLong("createdAt", System.currentTimeMillis())
 )
 

@@ -12,8 +12,8 @@ android {
         applicationId = "ir.ghestyar.app"
         minSdk = 29
         targetSdk = 34
-        versionCode = 2
-        versionName = "1.0.1"
+        versionCode = 4
+        versionName = "1.0.06"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

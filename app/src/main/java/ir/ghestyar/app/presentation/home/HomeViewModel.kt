@@ -210,6 +210,7 @@ class HomeViewModel(
         val rows = relevant.groupBy { it.loanId }.map { (loanId, list) ->
             val firstDueDate = LocalDate.parse(list.first().dueDate)
             MonthlyReportRow(
+                loanId = loanId,
                 loanName = loanNameById[loanId]?.name ?: "—",
                 loanImagePath = loanNameById[loanId]?.imagePath,
                 day = PersianDateConverter.toJalali(firstDueDate).day,

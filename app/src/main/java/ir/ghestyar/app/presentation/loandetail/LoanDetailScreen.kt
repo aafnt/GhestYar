@@ -87,7 +87,7 @@ fun LoanDetailScreen(
                 shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
             ) {
-                LoanHeader(loan.name, loan.imagePath, loan.totalAmount, loan.receivedDate, loan.installmentCount)
+                LoanHeader(loan.name, loan.imagePath, loan.totalAmount, loan.receivedDate, loan.installmentCount, loan.description)
             }
 
             val tabs = DetailTab.entries
@@ -188,19 +188,25 @@ fun LoanDetailScreen(
 
 @Composable
 private fun LoanHeader(
-    name: String, imagePath: String?, totalAmount: Long, receivedDate: String, installmentCount: Int
+    name: String, imagePath: String?, totalAmount: Long, receivedDate: String, installmentCount: Int, description: String?
 ) {
     Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
         LoanImage(imagePath, size = 56.dp)
         Spacer(Modifier.width(12.dp))
         Column {
             Text(name, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-            Text(PersianNumberUtils.formatToman(totalAmount), style = MaterialTheme.typography.bodyMedium)
             Text(
-                "دریافت: ${PersianDateConverter.formatFull(LocalDate.parse(receivedDate))} — ${PersianNumberUtils.formatNumber(installmentCount)} قسط",
-                style = MaterialTheme.typography.bodySmall,
+                "${PersianNumberUtils.formatToman(totalAmount)} — دریافت: ${PersianDateConverter.formatFull(LocalDate.parse(receivedDate))} — ${PersianNumberUtils.formatNumber(installmentCount)} قسط",
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
+            if (!description.isNullOrBlank()) {
+                Text(
+                    description,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
         }
     }
 }
@@ -284,6 +290,7 @@ private fun EditLoanDialog(
     var name by remember { mutableStateOf(loan.name) }
     var amountText by remember { mutableStateOf(PersianNumberUtils.toPersianDigits(loan.totalAmount.toString())) }
     var imagePath by remember { mutableStateOf(loan.imagePath) }
+    var description by remember { mutableStateOf(loan.description ?: "") }
 
     val imagePicker = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
@@ -321,13 +328,21 @@ private fun EditLoanDialog(
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
+                Spacer(Modifier.height(8.dp))
+                OutlinedTextField(
+                    value = description,
+                    onValueChange = { description = it },
+                    label = { Text("توضیحات (اختیاری)") },
+                    minLines = 2,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         },
         confirmButton = {
             TextButton(onClick = {
                 if (name.isNotBlank()) {
                     val amount = PersianNumberUtils.parseAmount(amountText) ?: loan.totalAmount
-                    onSave(loan.copy(name = name.trim(), totalAmount = amount, imagePath = imagePath))
+                    onSave(loan.copy(name = name.trim(), totalAmount = amount, imagePath = imagePath, description = description.trim().ifBlank { null }))
                 }
             }) { Text("ذخیره") }
         },

@@ -116,6 +116,21 @@ fun AddLoanScreen(
             item { AlertEditor("هشدار دوم", state.alert2, viewModel::onAlert2Change) }
 
             item {
+                OutlinedTextField(
+                    value = state.description,
+                    onValueChange = viewModel::onDescriptionChange,
+                    label = { Text("توضیحات (اختیاری)") },
+                    minLines = 2,
+                    shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                        focusedContainerColor = MaterialTheme.colorScheme.surface
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+
+            item {
                 Button(onClick = { viewModel.buildPreview() }, modifier = Modifier.fillMaxWidth()) {
                     Text("پیش‌نمایش اقساط")
                 }

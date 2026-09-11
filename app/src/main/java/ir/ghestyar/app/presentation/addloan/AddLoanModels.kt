@@ -20,6 +20,7 @@ data class AddLoanFormState(
     val firstDueDateText: String = "",
     val firstInstallmentAmountText: String = "",
     val otherInstallmentAmountText: String = "",
+    val description: String = "",
     val alert1: AlertFormState = AlertFormState(),
     val alert2: AlertFormState = AlertFormState(),
     val errors: Map<String, String> = emptyMap(),
