@@ -96,6 +96,7 @@ fun SettingsScreen(app: GhestYarApplication, onBack: () -> Unit) {
             SettingsSection(title = "درباره برنامه") {
                 Text(stringResourceAppName())
                 Text("نسخه ${BuildConfig.VERSION_NAME}", style = MaterialTheme.typography.bodySmall)
+                Text("تماس با ما: aa_fnt@yahoo.com", style = MaterialTheme.typography.bodySmall)
             }
         }
     }
@@ -121,9 +122,12 @@ private fun stringResourceAppName(): String = androidx.compose.ui.res.stringReso
 
 @Composable
 private fun SettingsSection(title: String, content: @Composable ColumnScope.() -> Unit) {
-    Column {
+    Column(Modifier.fillMaxWidth()) {
         Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(8.dp))
-        Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) { Column(Modifier.padding(16.dp), content = content) }
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+        ) { Column(Modifier.padding(16.dp), content = content) }
     }
 }
